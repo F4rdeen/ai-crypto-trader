@@ -131,8 +131,11 @@ def send_webhook_alert(payload: dict) -> None:
 
 def with_retry(func, *args, **kwargs):
     """
-    Call *func*(*args*, **kwargs) up to MAX_RETRIES times, doubling the wait
-    between each attempt (exponential back-off with full jitter).
+    Call *func*(*args*, **kwargs) up to MAX_RETRIES times, doubling the base
+    delay between each attempt (exponential back-off with proportional jitter).
+
+    The jitter factor scales from 0.5 to 1.0 as attempts progress, slightly
+    spreading retries to reduce thundering-herd effects without full randomness.
 
     Raises the last exception if all attempts are exhausted.
     """
@@ -537,10 +540,11 @@ def run_trading_bot() -> None:
 
     # Retrieve the column names the model was trained on so we can ensure
     # the live feature row has exactly the same columns in the same order.
+    trained_feature_names: list[str] | None
     try:
-        trained_feature_names: list[str] = model.get_booster().feature_names
+        trained_feature_names = model.get_booster().feature_names
     except AttributeError:
-        trained_feature_names = None  # type: ignore[assignment]
+        trained_feature_names = None
 
     send_webhook_alert(
         {
@@ -557,7 +561,6 @@ def run_trading_bot() -> None:
         # Synchronise to the next candle close
         # ------------------------------------------------------------------
         wait_secs = seconds_until_next_candle()
-        next_close = datetime.now(timezone.utc)
         log.info(
             "Sleeping %.1f s until next candle close (~%s UTC) ...",
             wait_secs,

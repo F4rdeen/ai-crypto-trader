@@ -58,7 +58,10 @@ def train_trading_model(input_csv, model_filename, run_rfe=False, run_shap=True)
                 eval_metric='logloss',
             ),
             step=1,
-            cv=StratifiedKFold(n_splits=5, shuffle=False),
+            cv=StratifiedKFold(
+                n_splits=5,
+                shuffle=False,  # shuffle=False is intentional for time-series data
+            ),                  # to preserve chronological order and prevent leakage
             scoring='precision',
             min_features_to_select=5,
             n_jobs=-1,
