@@ -1,0 +1,21 @@
+# ============================================================
+# requirements.txt — AI Crypto Trader
+# Pin major versions; allow patch releases for security fixes.
+# ============================================================
+
+# --- Data & ML ---
+pandas>=2.0,<3.0
+numpy>=1.26,<2.0
+pandas-ta>=0.3.14b
+xgboost>=2.0,<3.0
+scikit-learn>=1.4,<2.0
+shap>=0.45,<1.0
+
+# --- Exchange connectivity ---
+ccxt>=4.3,<5.0
+
+# --- HTTP & alerting ---
+requests>=2.31,<3.0
+
+# --- Serialisation (model loading) ---
+# pickle is part of the stdlib; no additional package required.
