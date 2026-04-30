@@ -1,6 +1,6 @@
 import ccxt
 import pandas as pd
-import pandas_ta as ta
+import pandas_ta_classic as ta
 import time
 from datetime import datetime, timedelta
 
