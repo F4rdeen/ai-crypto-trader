@@ -41,7 +41,7 @@ def fetch_crypto_data(
     pd.DataFrame
         DataFrame with columns: timestamp, open, high, low, close, volume.
     """
-    print(f"Initialising data pull for {symbol} on {timeframe} timeframe...")
+    print(f"Initializing data pull for {symbol} on {timeframe} timeframe...")
 
     # No API keys needed for public OHLCV endpoints.
     exchange = ccxt.binance({"enableRateLimit": True})
